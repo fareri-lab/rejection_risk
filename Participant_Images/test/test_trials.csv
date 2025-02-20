@@ -1,0 +1,121 @@
+TrialNumber,Partner,Condition,Photos,Feedback,FeedbackWait
+1,Charlie,Rej,Participant_Images/test/test_Images/test_Image_2.jpeg,did not like,3.613205605
+2,Charlie,Rej,Participant_Images/test/test_Images/test_Image_13.jpeg,did not like,4.988446431
+3,Charlie,Rej,Participant_Images/test/test_Images/test_Image_20.jpeg,did not like,3.470791822
+4,Charlie,Rej,Participant_Images/test/test_Images/test_Image_11.jpeg,did not like,3.820572462
+5,Charlie,Rej,Participant_Images/test/test_Images/test_Image_29.jpeg,did not like,2.455989137
+6,Charlie,Rej,Participant_Images/test/test_Images/test_Image_3.jpeg,liked,3.79605092
+7,Charlie,Rej,Participant_Images/test/test_Images/test_Image_5.jpeg,liked,3.562416326
+8,Charlie,Rej,Participant_Images/test/test_Images/test_Image_10.jpeg,did not like,2.843822497
+9,Charlie,Rej,Participant_Images/test/test_Images/test_Image_23.jpeg,liked,3.546495948
+10,Charlie,Rej,Participant_Images/test/test_Images/test_Image_18.jpeg,did not like,1.672012706
+11,Charlie,Rej,Participant_Images/test/test_Images/test_Image_30.jpeg,liked,4.942172136
+12,Charlie,Rej,Participant_Images/test/test_Images/test_Image_25.jpeg,liked,2.50187214
+13,Charlie,Rej,Participant_Images/test/test_Images/test_Image_19.jpeg,did not like,2.071164779
+14,Charlie,Rej,Participant_Images/test/test_Images/test_Image_12.jpeg,liked,5.336503566
+15,Charlie,Rej,Participant_Images/test/test_Images/test_Image_14.jpeg,did not like,2.642157193
+16,Charlie,Rej,Participant_Images/test/test_Images/test_Image_7.jpeg,did not like,4.456234322
+17,Charlie,Rej,Participant_Images/test/test_Images/test_Image_28.jpeg,did not like,4.438512181
+18,Charlie,Rej,Participant_Images/test/test_Images/test_Image_8.jpeg,did not like,2.682944783
+19,Charlie,Rej,Participant_Images/test/test_Images/test_Image_16.jpeg,did not like,4.51984296
+20,Charlie,Rej,Participant_Images/test/test_Images/test_Image_15.jpeg,did not like,3.195382774
+21,Charlie,Rej,Participant_Images/test/test_Images/test_Image_26.jpeg,liked,1.779333479
+22,Charlie,Rej,Participant_Images/test/test_Images/test_Image_9.jpeg,did not like,4.312468682
+23,Charlie,Rej,Participant_Images/test/test_Images/test_Image_6.jpeg,did not like,4.940433059
+24,Charlie,Rej,Participant_Images/test/test_Images/test_Image_1.jpeg,did not like,2.7105123
+25,Charlie,Rej,Participant_Images/test/test_Images/test_Image_22.jpeg,did not like,3.602308302
+26,Charlie,Rej,Participant_Images/test/test_Images/test_Image_21.jpeg,did not like,4.106391878
+27,Charlie,Rej,Participant_Images/test/test_Images/test_Image_24.jpeg,liked,3.799433026
+28,Charlie,Rej,Participant_Images/test/test_Images/test_Image_17.jpeg,liked,5.246980764
+29,Charlie,Rej,Participant_Images/test/test_Images/test_Image_27.jpeg,did not like,3.30081769
+30,Charlie,Rej,Participant_Images/test/test_Images/test_Image_4.jpeg,did not like,1.661473164
+31,Riley,Acc,Participant_Images/test/test_Images/test_Image_20.jpeg,liked,3.613205605
+32,Riley,Acc,Participant_Images/test/test_Images/test_Image_29.jpeg,liked,4.988446431
+33,Riley,Acc,Participant_Images/test/test_Images/test_Image_19.jpeg,liked,3.470791822
+34,Riley,Acc,Participant_Images/test/test_Images/test_Image_10.jpeg,liked,3.820572462
+35,Riley,Acc,Participant_Images/test/test_Images/test_Image_22.jpeg,liked,2.455989137
+36,Riley,Acc,Participant_Images/test/test_Images/test_Image_8.jpeg,liked,3.79605092
+37,Riley,Acc,Participant_Images/test/test_Images/test_Image_25.jpeg,liked,3.562416326
+38,Riley,Acc,Participant_Images/test/test_Images/test_Image_7.jpeg,liked,2.843822497
+39,Riley,Acc,Participant_Images/test/test_Images/test_Image_16.jpeg,liked,3.546495948
+40,Riley,Acc,Participant_Images/test/test_Images/test_Image_4.jpeg,did not like,1.672012706
+41,Riley,Acc,Participant_Images/test/test_Images/test_Image_6.jpeg,liked,4.942172136
+42,Riley,Acc,Participant_Images/test/test_Images/test_Image_15.jpeg,liked,2.50187214
+43,Riley,Acc,Participant_Images/test/test_Images/test_Image_24.jpeg,did not like,2.071164779
+44,Riley,Acc,Participant_Images/test/test_Images/test_Image_30.jpeg,liked,5.336503566
+45,Riley,Acc,Participant_Images/test/test_Images/test_Image_17.jpeg,liked,2.642157193
+46,Riley,Acc,Participant_Images/test/test_Images/test_Image_12.jpeg,did not like,4.456234322
+47,Riley,Acc,Participant_Images/test/test_Images/test_Image_11.jpeg,liked,4.438512181
+48,Riley,Acc,Participant_Images/test/test_Images/test_Image_13.jpeg,did not like,2.682944783
+49,Riley,Acc,Participant_Images/test/test_Images/test_Image_23.jpeg,did not like,4.51984296
+50,Riley,Acc,Participant_Images/test/test_Images/test_Image_1.jpeg,liked,3.195382774
+51,Riley,Acc,Participant_Images/test/test_Images/test_Image_14.jpeg,liked,1.779333479
+52,Riley,Acc,Participant_Images/test/test_Images/test_Image_26.jpeg,liked,4.312468682
+53,Riley,Acc,Participant_Images/test/test_Images/test_Image_18.jpeg,did not like,4.940433059
+54,Riley,Acc,Participant_Images/test/test_Images/test_Image_28.jpeg,liked,2.7105123
+55,Riley,Acc,Participant_Images/test/test_Images/test_Image_5.jpeg,liked,3.602308302
+56,Riley,Acc,Participant_Images/test/test_Images/test_Image_21.jpeg,did not like,4.106391878
+57,Riley,Acc,Participant_Images/test/test_Images/test_Image_3.jpeg,did not like,3.799433026
+58,Riley,Acc,Participant_Images/test/test_Images/test_Image_2.jpeg,liked,5.246980764
+59,Riley,Acc,Participant_Images/test/test_Images/test_Image_27.jpeg,liked,3.30081769
+60,Riley,Acc,Participant_Images/test/test_Images/test_Image_9.jpeg,did not like,1.661473164
+61,Sam,Acc,Participant_Images/test/test_Images/test_Image_16.jpeg,liked,3.613205605
+62,Sam,Acc,Participant_Images/test/test_Images/test_Image_20.jpeg,did not like,4.988446431
+63,Sam,Acc,Participant_Images/test/test_Images/test_Image_13.jpeg,liked,3.470791822
+64,Sam,Acc,Participant_Images/test/test_Images/test_Image_6.jpeg,liked,3.820572462
+65,Sam,Acc,Participant_Images/test/test_Images/test_Image_19.jpeg,liked,2.455989137
+66,Sam,Acc,Participant_Images/test/test_Images/test_Image_23.jpeg,liked,3.79605092
+67,Sam,Acc,Participant_Images/test/test_Images/test_Image_2.jpeg,liked,3.562416326
+68,Sam,Acc,Participant_Images/test/test_Images/test_Image_7.jpeg,did not like,2.843822497
+69,Sam,Acc,Participant_Images/test/test_Images/test_Image_29.jpeg,liked,3.546495948
+70,Sam,Acc,Participant_Images/test/test_Images/test_Image_3.jpeg,liked,1.672012706
+71,Sam,Acc,Participant_Images/test/test_Images/test_Image_28.jpeg,did not like,4.942172136
+72,Sam,Acc,Participant_Images/test/test_Images/test_Image_11.jpeg,liked,2.50187214
+73,Sam,Acc,Participant_Images/test/test_Images/test_Image_27.jpeg,liked,2.071164779
+74,Sam,Acc,Participant_Images/test/test_Images/test_Image_10.jpeg,did not like,5.336503566
+75,Sam,Acc,Participant_Images/test/test_Images/test_Image_12.jpeg,did not like,2.642157193
+76,Sam,Acc,Participant_Images/test/test_Images/test_Image_18.jpeg,did not like,4.456234322
+77,Sam,Acc,Participant_Images/test/test_Images/test_Image_30.jpeg,did not like,4.438512181
+78,Sam,Acc,Participant_Images/test/test_Images/test_Image_4.jpeg,liked,2.682944783
+79,Sam,Acc,Participant_Images/test/test_Images/test_Image_26.jpeg,did not like,4.51984296
+80,Sam,Acc,Participant_Images/test/test_Images/test_Image_22.jpeg,liked,3.195382774
+81,Sam,Acc,Participant_Images/test/test_Images/test_Image_5.jpeg,liked,1.779333479
+82,Sam,Acc,Participant_Images/test/test_Images/test_Image_14.jpeg,liked,4.312468682
+83,Sam,Acc,Participant_Images/test/test_Images/test_Image_24.jpeg,liked,4.940433059
+84,Sam,Acc,Participant_Images/test/test_Images/test_Image_21.jpeg,did not like,2.7105123
+85,Sam,Acc,Participant_Images/test/test_Images/test_Image_25.jpeg,liked,3.602308302
+86,Sam,Acc,Participant_Images/test/test_Images/test_Image_9.jpeg,liked,4.106391878
+87,Sam,Acc,Participant_Images/test/test_Images/test_Image_8.jpeg,liked,3.799433026
+88,Sam,Acc,Participant_Images/test/test_Images/test_Image_1.jpeg,liked,5.246980764
+89,Sam,Acc,Participant_Images/test/test_Images/test_Image_17.jpeg,liked,3.30081769
+90,Sam,Acc,Participant_Images/test/test_Images/test_Image_15.jpeg,liked,1.661473164
+91,Alex,Rej,Participant_Images/test/test_Images/test_Image_12.jpeg,did not like,3.613205605
+92,Alex,Rej,Participant_Images/test/test_Images/test_Image_4.jpeg,did not like,4.988446431
+93,Alex,Rej,Participant_Images/test/test_Images/test_Image_7.jpeg,did not like,3.470791822
+94,Alex,Rej,Participant_Images/test/test_Images/test_Image_16.jpeg,did not like,3.820572462
+95,Alex,Rej,Participant_Images/test/test_Images/test_Image_22.jpeg,did not like,2.455989137
+96,Alex,Rej,Participant_Images/test/test_Images/test_Image_17.jpeg,did not like,3.79605092
+97,Alex,Rej,Participant_Images/test/test_Images/test_Image_3.jpeg,did not like,3.562416326
+98,Alex,Rej,Participant_Images/test/test_Images/test_Image_28.jpeg,did not like,2.843822497
+99,Alex,Rej,Participant_Images/test/test_Images/test_Image_8.jpeg,did not like,3.546495948
+100,Alex,Rej,Participant_Images/test/test_Images/test_Image_26.jpeg,liked,1.672012706
+101,Alex,Rej,Participant_Images/test/test_Images/test_Image_14.jpeg,did not like,4.942172136
+102,Alex,Rej,Participant_Images/test/test_Images/test_Image_11.jpeg,liked,2.50187214
+103,Alex,Rej,Participant_Images/test/test_Images/test_Image_6.jpeg,did not like,2.071164779
+104,Alex,Rej,Participant_Images/test/test_Images/test_Image_13.jpeg,liked,5.336503566
+105,Alex,Rej,Participant_Images/test/test_Images/test_Image_9.jpeg,did not like,2.642157193
+106,Alex,Rej,Participant_Images/test/test_Images/test_Image_10.jpeg,did not like,4.456234322
+107,Alex,Rej,Participant_Images/test/test_Images/test_Image_30.jpeg,liked,4.438512181
+108,Alex,Rej,Participant_Images/test/test_Images/test_Image_18.jpeg,did not like,2.682944783
+109,Alex,Rej,Participant_Images/test/test_Images/test_Image_1.jpeg,liked,4.51984296
+110,Alex,Rej,Participant_Images/test/test_Images/test_Image_5.jpeg,did not like,3.195382774
+111,Alex,Rej,Participant_Images/test/test_Images/test_Image_21.jpeg,liked,1.779333479
+112,Alex,Rej,Participant_Images/test/test_Images/test_Image_24.jpeg,did not like,4.312468682
+113,Alex,Rej,Participant_Images/test/test_Images/test_Image_29.jpeg,did not like,4.940433059
+114,Alex,Rej,Participant_Images/test/test_Images/test_Image_20.jpeg,did not like,2.7105123
+115,Alex,Rej,Participant_Images/test/test_Images/test_Image_19.jpeg,liked,3.602308302
+116,Alex,Rej,Participant_Images/test/test_Images/test_Image_23.jpeg,did not like,4.106391878
+117,Alex,Rej,Participant_Images/test/test_Images/test_Image_27.jpeg,did not like,3.799433026
+118,Alex,Rej,Participant_Images/test/test_Images/test_Image_15.jpeg,liked,5.246980764
+119,Alex,Rej,Participant_Images/test/test_Images/test_Image_2.jpeg,liked,3.30081769
+120,Alex,Rej,Participant_Images/test/test_Images/test_Image_25.jpeg,did not like,1.661473164
