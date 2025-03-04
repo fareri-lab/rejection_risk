@@ -263,7 +263,7 @@ displayrating_text = visual.TextStim(win=win, name='displayrating_text',
 #emotion3
 emotion3_slider = visual.Slider(win=win, name='slider3',
         startValue=999, size=(12.0, 0.8), pos=(0, -3.2), units=None,
-        labels=('0','1(Not at all)', '2', '3', '4', '5 (A lot)'), ticks=(0,1, 2, 3, 4, 5), granularity=0.0,
+        labels=(['0','1(Not at all)', '2', '3', '4', '5 (A lot)']), ticks=(0,1, 2, 3, 4, 5), granularity=0.0,
         style='rating', styleTweaks=('labels45', 'triangleMarker'), opacity=None,
         labelColor='white', markerColor='cornflowerblue', lineColor='white', colorSpace='rgb',
         font='Open Sans', labelHeight=0.05, 
@@ -455,11 +455,6 @@ cue = visual.TextStim(win, text="Make your choice", pos=(0, 10.5), height=1)
 
 routine_clock = core.Clock()  # Initialize the clock
 
-# Emotion Rating Screen
-routine_clock.reset()  # Reset the clock before entering the loop
-emotion1_slider.reset()  # Ensure slider starts fresh
-
-# Reset the slider position
 emotions = [
     {"name": "happy", "slider": emotion1_slider, "question": emotion1question_text},
     {"name": "emotion2", "slider": emotion2_slider, "question": emotion2question_text},
@@ -468,39 +463,114 @@ emotions = [
     {"name": "emotion5", "slider": emotion5_slider, "question": emotion5question_text},
     {"name": "emotion6", "slider": emotion6_slider, "question": emotion6question_text},]
 
-# Set slider constraints
-slider_min = 0
-slider_max = 5
+def partner_match_with_loading(win, partner_name, expdir):
+    """
+    Displays a loading bar before showing the partner match screen.
 
-# Iterate through each emotion rating screen
-for emotion in emotions:
-    emotion_slider = emotion["slider"]
-    emotion_question_text = emotion["question"]
+    Parameters:
+        win (visual.Window): The PsychoPy window where stimuli will be displayed.
+        partner_name (str): The name of the partner from the trial data.
+        expdir (str): The experiment directory where images are stored.
+    """
     
-    # Reset the slider before use
-    emotion_slider.markerPos = 2.5  
-    rating_selected = False  
+    # Define emoji image paths
+    emoji_paths = {
+        'Charlie': os.path.join(expdir, "Task_Images", "nerdemoji_nobackground.png"),
+        'Riley': os.path.join(expdir, "Task_Images", "huggingemoji.png"),
+        'Alex': os.path.join(expdir, "Task_Images", "sunglassemoji_nobackground.png"),
+        'Sam': os.path.join(expdir, "Task_Images", "smilingemoji.png")
+    }
 
-    # Clear previous key events
-    kb.clearEvents()
+    # Get partner avatar image path
+    partneravatar = emoji_paths.get(partner_name, os.path.join(expdir, "Task_Images", "defaultemoji.png"))
 
-    while not rating_selected:  # Keep the screen up until space is pressed
-        keys = event.getKeys()  # Get key presses
-        displayrating_text.setText(round(emotion_slider.getMarkerPos(), 1))  # Update display
+    # Create "Syncing..." text
+    syncing_text = visual.TextStim(win, text='Syncing…', pos=(0, 2.4), height=0.96, color='white')
 
-        if keys:  # Process keys only if pressed
-            for key in keys:
-                if 'left' in keys:
-                    emotion_slider.markerPos = max(slider_min, emotion_slider.markerPos - 0.1)
-                    displayrating_text.setText(round(emotion_slider.getMarkerPos(), 1))
-                elif 'right' in keys:
-                    emotion_slider.markerPos = min(slider_max, emotion_slider.markerPos + 0.1)
-                    displayrating_text.setText(round(emotion_slider.getMarkerPos(), 1))
-                elif 'escape' in keys:
-                    win.close()
-                    core.quit()
-                elif 'space' in keys:
-                    rating_selected = True  # Exit the loop
+    # Create loading percentage text
+    percentage_texts = [
+        visual.TextStim(win, text='0%', pos=(0, -1.6), height=0.8, color='white'),
+        visual.TextStim(win, text='25%', pos=(0, -1.6), height=0.8, color='white'),
+        visual.TextStim(win, text='50%', pos=(0, -1.6), height=0.8, color='white'),
+        visual.TextStim(win, text='75%', pos=(0, -1.6), height=0.8, color='white'),
+        visual.TextStim(win, text='100%', pos=(0, -1.6), height=0.8, color='white')
+    ]
+
+    # Create loading bar components
+    loading_bars = [
+        visual.Rect(win, width=2, height=0.8, pos=(-3, 0), fillColor='white'),
+        visual.Rect(win, width=4, height=0.8, pos=(-2, 0), fillColor='white'),
+        visual.Rect(win, width=6, height=0.8, pos=(-1, 0), fillColor='white'),
+        visual.Rect(win, width=8, height=0.8, pos=(0, 0), fillColor='white')
+    ]
+
+    # **Step 1: Show Loading Animation**
+    routine_clock = core.Clock()
+    while routine_clock.getTime() < 6.25:  # Total duration: 6.25 seconds
+
+        syncing_text.draw()  # Always show "Syncing..."
+
+        # Show different stages of loading at correct times
+        time_elapsed = routine_clock.getTime()
+        if time_elapsed < 1.25:
+            percentage_texts[0].draw()
+        elif 1.25 <= time_elapsed < 2.5:
+            loading_bars[0].draw()
+            percentage_texts[1].draw()
+        elif 2.5 <= time_elapsed < 3.75:
+            loading_bars[1].draw()
+            percentage_texts[2].draw()
+        elif 3.75 <= time_elapsed < 5:
+            loading_bars[2].draw()
+            percentage_texts[3].draw()
+        elif 5 <= time_elapsed < 6.25:
+            loading_bars[3].draw()
+            percentage_texts[4].draw()
+
+        win.flip()  # Update the screen
+
+    # **Step 2: Display Matched Partner Screen**
+    matched_text = f"You have matched with {partner_name}!"
+    partner_avatar_stim = visual.ImageStim(win, image=partneravatar, size=(5, 5), pos=(0, 2))
+    matched_text_stim = visual.TextStim(win, text=matched_text, pos=(0, 7), height=1, color='white')
+    presstobegin_text = visual.TextStim(win, text="Press space to begin.", pos=(0, -7), height=1, color='white')
+
+    matched_text_stim.draw()
+    partner_avatar_stim.draw()
+    presstobegin_text.draw()
+    win.flip()
+
+    # Wait for spacebar press before proceeding
+    event.waitKeys(keyList=['space'])
+
+def display_emotion_ratings(win, emotions, slider_min=0, slider_max=5):
+    """
+    Displays emotion rating screens one at a time, allowing the user to adjust sliders.
+
+    Parameters:
+        win (visual.Window): The PsychoPy window object.
+        emotions (list): A list of dictionaries, each containing:
+            - "name" (str): Name of the emotion.
+            - "slider" (visual.Slider): The slider object for rating.
+            - "question" (visual.TextStim): The question text associated with the slider.
+        slider_min (int, optional): Minimum slider value. Default is 0.
+        slider_max (int, optional): Maximum slider value. Default is 5.
+    """
+    routine_clock.reset()  # Reset the clock before entering the loop
+
+    # Set slider constraints
+    slider_min = 0
+    slider_max = 5
+
+    # Iterate through each emotion rating screen
+    for emotion in emotions:
+        emotion_slider = emotion["slider"]
+        emotion_question_text = emotion["question"]
+        
+        # Reset the slider before use
+        emotion_slider.reset()  # Ensure slider starts fresh
+        emotion_slider.markerPos = 2.5  
+        rating_selected = False 
 
         # Draw all components before flipping
         emotion_slider.draw()
@@ -509,139 +579,41 @@ for emotion in emotions:
         emotioncontinue_text.draw()
         win.flip()  # Refresh the screen after updating everything
 
+            # Clear previous key events
+        kb.clearEvents()
 
+        while not rating_selected:  # Keep the screen up until space is pressed
+            keys = event.getKeys()  # Get key presses
+            displayrating_text.setText(round(emotion_slider.getMarkerPos(), 1))  # Update display
 
+            if keys:  # Process keys only if pressed
+                for key in keys:
+                    if 'left' in keys:
+                        emotion_slider.markerPos = max(slider_min, emotion_slider.markerPos - 0.1)
+                        displayrating_text.setText(round(emotion_slider.getMarkerPos(), 1))
+                    elif 'right' in keys:
+                        emotion_slider.markerPos = min(slider_max, emotion_slider.markerPos + 0.1)
+                        displayrating_text.setText(round(emotion_slider.getMarkerPos(), 1))
+                    elif 'escape' in keys:
+                        win.close()
+                        core.quit()
+                    elif 'space' in keys:
+                        rating_selected = True  # Exit the loop
 
+            
+            # Draw all components before flipping
+            emotion_slider.draw()
+            emotion_question_text.draw()
+            displayrating_text.draw()
+            emotioncontinue_text.draw()
+            win.flip()  # Refresh the screen after updating everything
 
-#match with partner and photo share
+        #store selected rating
+        emotion_ratings[emotion["name"]] = round(emotion_slider.getMarkerPos(), 1)
+        
+    return emotion_ratings
 
-for index, row in df_photoshare.iterrows():
-    if row['TrialNumber'] not in [1, 31, 61, 91]: # establishes two blocks per 30 trials
-        continueRoutine = False # if not trial 31 or 63, skip routine completely
-
-    if 'escape' in event.getKeys():
-        win.close()
-        core.quit()
-
-    charlie_emoji = os.path.join(expdir, "Task_Images", "nerdemoji_nobackground.png")
-    riley_emoji = os.path.join(expdir, "Task_Images", "huggingemoji.png")
-    sam_emoji = os.path.join(expdir, "Task_Images", "smilingemoji.png")
-    alex_emoji = os.path.join(expdir, "Task_Images", "sunglassemoji_nobackground.png")
-
-    partner_name = row['Partner'] # got partner name from the spreadhseet
-    matched_text = 'You have matched with' + " " + str(partner_name) + "!"
-    
-    if partner_name == 'Charlie':
-        partneravatar= charlie_emoji
-    elif partner_name == 'Riley':
-        partneravatar= riley_emoji
-    elif partner_name == 'Alex':
-        partneravatar= alex_emoji
-    elif partner_name =='Sam':
-        partneravatar= sam_emoji
-
-    # Create stimuli
-    partner_avatar_stim = visual.ImageStim(win, image=partneravatar, size=(5, 5), pos=(0, 2))
-    matched_text_stim = visual.TextStim(win, text=matched_text, pos=(0, 7), height=1, color='white', wrapWidth=None)
-
-     # Start trial
-trial_onset = globalClock.getTime()
-
-
-# **Step 1: Display Waiting Text for 3 sec**
-while routine_clock.getTime() < 3:
-    waiting_text.draw()
-    win.flip()
-
-# **Step 2: Start Syncing + Transparent**
-routine_clock.reset()  # Reset timer for syncing phase
-while routine_clock.getTime() < 6.25:
-    syncing_text.draw()  # Syncing stays the full 9.25 sec
-    Transparent.draw()  # Transparent stays for 6.25 sec
-    
-    # **Text 0 (appears at 3 sec, disappears after 1.25 sec)**
-    if routine_clock.getTime() < 1.25:
-        text_0.draw()
-    
-    # **Text 25 + Loading 25 (appears at 4.25 sec, disappears after 1.25 sec)**
-    elif 1.25 <= routine_clock.getTime() < 2.5:
-        Loading_25.draw()
-        text_25.draw()
-    
-    # **Text 50 + Loading 50 (appears at 5.5 sec, disappears after 1.25 sec)**
-    elif 2.5 <= routine_clock.getTime() < 3.75:
-        Loading_50.draw()
-        text_50.draw()
-
-    # **Text 75 + Loading 75 (appears at 6.75 sec, disappears after 1.25 sec)**
-    elif 3.75 <= routine_clock.getTime() < 5:
-        Loading_75.draw()
-        text_75.draw()
-
-    # **Text 100 + Loading 100 (appears at 8 sec, disappears after 1.25 sec)**
-    elif 5 <= routine_clock.getTime() < 6.25:
-        Loading_100.draw()
-        text_100.draw()
-
-    win.flip()
-
-# **Step 3: Show Matched Text and Partner Avatar**
-win.flip()
-
-matched_text_stim.draw()
-partner_avatar_stim.draw()
-presstobegin_text.draw()
-win.flip()
-
-#wait for spacebar press before proceeding
-event.waitKeys(keyList=['space'])
-
-
-#get salience rating
-
-# Set slider constraints
-slider_min = 0
-slider_max = 5
-
-# Clear previous key events
-salienceratingtext = (f'How likely are you to share photos with {partner_name} in the future? \n\n Use your left and right arrows to move the arrow to your desired rating.' )
-event.clearEvents('keyboard')
-salience_slider.markerPos = 2.5
-saliencequestion_text.setText(salienceratingtext)
-rating_selected = False  # Reset before the salience rating loop
-
-while not rating_selected:  # Keep the screen up until space is pressed
-        keys = event.getKeys()  # Get key presses
-        displaysaliencerating_text.setText(round(salience_slider.getMarkerPos(), 1))  # Update display
-
-        if keys:  # Process keys only if pressed
-            if 'left' in keys:
-                salience_slider.markerPos = max(slider_min, salience_slider.markerPos - 0.1)
-                displaysaliencerating_text.setText(round(salience_slider.getMarkerPos(), 1))
-            elif 'right' in keys:
-                salience_slider.markerPos = min(slider_max, salience_slider.markerPos + 0.1)
-                displaysaliencerating_text.setText(round(salience_slider.getMarkerPos(), 1))
-            elif 'escape' in keys:
-                win.close()
-                core.quit()
-            elif 'space' in keys:
-                rating_selected = True  # Exit the loop
-
-        # Draw all components before flipping
-        salience_slider.draw()
-        saliencequestion_text.draw()
-        displaysaliencerating_text.draw()
-        saliencecontinue_text.draw()
-        partner_avatar_stim.draw()
-        win.flip()  # Refresh the screen after updating everything
-
-
-#iterate through photo sharing and feedback screen
-for index, row in df_photoshare.iterrows():
-    if 'escape' in event.getKeys():
-        win.close()
-        core.quit()
-
+def photo_share_screen(win):
     partner_name = row['Partner'] # got partner name from the spreadhseet
     
     
@@ -657,12 +629,6 @@ for index, row in df_photoshare.iterrows():
 
     # Construct full path by joining the experiment directory with the spreadsheet path
     full_photo_path = os.path.normpath(os.path.join(expdir, photo_file))
-
-    if not os.path.exists(full_photo_path):
-        print(f"Subdir: {subdir}")
-        print(f"Photo File: {photo_file}")
-        print(f"Error: Photo {full_photo_path} not found! Skipping trial {index}.")
-        continue  # Skip if missing
 
     display_duration = row['FeedbackWait']  # Column name from your CSV
 
@@ -694,9 +660,7 @@ for index, row in df_photoshare.iterrows():
     win.flip()
     core.wait(2)  # Show feedback for 2 seconds
 
-
-# Iterate over trials
-for index, row in df_gambles.iterrows():
+def gamble_screen(win):
     # Reset colors each trial
     top_text.setColor('white')
     bottom_text.setColor('white')
@@ -737,6 +701,7 @@ for index, row in df_gambles.iterrows():
 
     event.clearEvents()  # Clear buffer before capturing input
     resp = None
+    gamble_choice = None
     response_timer = core.Clock()  # Start response timer
 
     while response_timer.getTime() < decision_dur:
@@ -754,11 +719,13 @@ for index, row in df_gambles.iterrows():
             core.quit()
 
         elif resp == '1':  # Risky option selected
+            gamble_choice = 1
             top_text.setColor('green')
             probability_text.setColor('green')
             bottom_text.setColor('green')
 
         elif resp == '9':  # Certain option selected
+            gamble_choice = 0
             certain_text.setColor('green')
 
     else:  # No response detected, show red
@@ -777,8 +744,266 @@ for index, row in df_gambles.iterrows():
     probability_text.draw()
     cue.draw()
     win.flip()
-    core.wait(1)  # Show feedback for 1 second
+    core.wait(1)  # Show feedback for 1 
+    
+    response_time = response_timer.getTime() if resp else None
+    return response_time, gamble_choice  # Now correctly coded as 1 (Risky) or 0 (Certain)
 
-# Close the experiment
+def salience_rating(win, partner_avatar_stim):
+    # Set slider constraints
+    slider_min = 0
+    slider_max = 5
+
+    # Clear previous key events
+    salienceratingtext = (f'How likely are you to share photos with {partner_name} in the future? \n\n Use your left and right arrows to move the arrow to your desired rating.' )
+    event.clearEvents('keyboard')
+    salience_slider.markerPos = 2.5
+    saliencequestion_text.setText(salienceratingtext)
+    rating_selected = False  # Reset before the salience rating loop
+
+    while not rating_selected:  # Keep the screen up until space is pressed
+            keys = event.getKeys()  # Get key presses
+            displaysaliencerating_text.setText(round(salience_slider.getMarkerPos(), 1))  # Update display
+
+            if keys:  # Process keys only if pressed
+                if 'left' in keys:
+                    salience_slider.markerPos = max(slider_min, salience_slider.markerPos - 0.1)
+                    displaysaliencerating_text.setText(round(salience_slider.getMarkerPos(), 1))
+                elif 'right' in keys:
+                    salience_slider.markerPos = min(slider_max, salience_slider.markerPos + 0.1)
+                    displaysaliencerating_text.setText(round(salience_slider.getMarkerPos(), 1))
+                elif 'escape' in keys:
+                    win.close()
+                    core.quit()
+                elif 'space' in keys:
+                    rating_selected = True  # Exit the loop
+
+            # Draw all components before flipping
+            salience_slider.draw()
+            saliencequestion_text.draw()
+            displaysaliencerating_text.draw()
+            saliencecontinue_text.draw()
+            partner_avatar_stim.draw()
+            win.flip()  # Refresh the screen after updating everything
+
+    
+
+# Loop through the trials
+# Total trials and block settings
+total_trials = 120
+trials_per_block = 30
+photo_gamble_cycle = 10  # 5 Photo + 5 Gamble = 10 trials per cycle
+num_cycles_before_mid_emotion = 3  # 3 cycles (15 trials) before mid-block Emotion Ratings
+num_cycles_after_mid_emotion = 3  # 3 cycles (15 trials) after mid-block Emotion Ratings
+
+# Initialize an empty list to store trial data
+experiment_data = []
+
+# Loop through the trials
+for trial in range(1, total_trials + 1):
+
+    print(f"DEBUG: Starting Trial {trial}")
+    
+    # Identify which block this trial belongs to
+    block_number = (trial - 1) // trials_per_block + 1
+
+    # Create a dictionary for trial data with empty values by default
+    trial_data = {
+        "TrialNumber": trial,
+        "Block": block_number,
+        "Partner": None,
+        "Condition": None,
+        "Feedback": None,
+        "ResponseTime": None,
+        "GambleChoice": None,
+        "GambleProbability": None,
+        "GamblePrice": None,
+        "NonGamblePrice": None,
+        "SelectedPrice": None,
+        "Emotion1": None,
+        "Emotion2": None,
+        "Emotion3": None,
+        "Emotion4": None,
+        "Emotion5": None,
+        "Emotion6": None,
+        "SalienceRating": None
+    }
+
+    # **Partner Match on the first trial of each block**
+    if trial in [1, 31, 61, 91]:  
+        print(f"DEBUG: Partner Match on Trial {trial}")
+        row = df_photoshare.iloc[trial - 1]
+        partner_name = row['Partner']
+        trial_data["Partner"] = partner_name
+
+        partner_match_with_loading(win, partner_name, expdir)
+
+        # **Emotion Ratings immediately after Partner Match**
+        print(f"DEBUG: Emotion Ratings on Trial {trial}")
+        emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+        
+        if emotion_ratings:  # Check if valid data is returned
+            for i, rating in enumerate(emotion_ratings.values()):
+                trial_data[f"Emotion{i+1}"] = rating
+
+    # **Determine Photo Share or Gamble Trial**
+    cycle_position = (trial - 1) % trials_per_block  
+    cycle_within_set = cycle_position % photo_gamble_cycle  
+
+    if cycle_position < 15 or (15 < cycle_position < 30):  
+        if cycle_within_set < 5:  
+            print(f"DEBUG: Photo Share Trial {trial}")
+            row = df_photoshare.iloc[(trial - 1) % len(df_photoshare)]
+            trial_data["Partner"] = row['Partner']
+            trial_data["Feedback"] = row['Feedback']
+            photo_share_screen(win)
+        else:  
+            print(f"DEBUG: Gamble Trial {trial}")
+            row = df_gambles.iloc[(trial - 1) % len(df_gambles)]
+            response_time, gamble_choice = gamble_screen(win)
+
+            # Store gamble data
+            trial_data["ResponseTime"] = response_time
+            trial_data["GambleChoice"] = gamble_choice  # Now correctly coded as 1 (Risky) or 0 (Certain)
+            trial_data["GambleProbability"] = row["win_probability"]
+            trial_data["GamblePrice"] = row["risky_gain"]
+            trial_data["NonGamblePrice"] = row["certain"]
+            trial_data["SelectedPrice"] = row["risky_gain"] if gamble_choice == 1 else row["certain"]
+
+    # **Mid-Block Emotion Ratings after 15 trials (Trial 15, 45, 75, 105)**
+    if cycle_position == (num_cycles_before_mid_emotion * photo_gamble_cycle - 1):  
+        print(f"DEBUG: Emotion Rating on Trial {trial}")
+        emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+
+        if emotion_ratings:  # Check if valid data is returned
+            for i, rating in enumerate(emotion_ratings.values()):
+                trial_data[f"Emotion{i+1}"] = rating
+
+    # **Final Emotion + Salience Ratings at the end of the block (Trial 30, 60, 90, 120)**
+    if cycle_position == (trials_per_block - 1):  
+        print(f"DEBUG: Emotion & Salience Rating on Trial {trial}")
+        emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+
+        if emotion_ratings:  # Check if valid data is returned
+            for i, rating in enumerate(emotion_ratings.values()):
+                trial_data[f"Emotion{i+1}"] = rating
+
+        print(f"DEBUG: Salience Rating on Trial {trial}")
+        trial_data["SalienceRating"] = salience_rating(win, salienceavatar_image)
+
+    # **Append trial data to experiment_data list**
+    experiment_data.append(trial_data)
+
+# **Saving Data**
+# Define the output directory for data storage
+data_dir = os.path.join(expdir, "data")
+
+# Ensure the data directory exists; if not, create it
+if not os.path.exists(data_dir):
+    os.makedirs(data_dir)
+
+# Define the output file path in the data folder
+output_file = os.path.join(data_dir, f"{sub_id}_data.csv")
+
+# Convert list of dictionaries into a DataFrame
+df_output = pd.DataFrame(experiment_data)
+
+# Save to CSV in the correct directory
+df_output.to_csv(output_file, index=False)
+print(f"DEBUG: Experiment data saved to {output_file}")
+
+# Close the experiment window after all trials
 win.close()
 core.quit()
+
+
+
+# # Loop through the trials
+# for trial in range(1, total_trials + 1):
+
+#     print(f"DEBUG: Starting Trial {trial}")
+
+#     # **Partner Match on the first trial of each block, THEN Emotion Ratings**
+#     if trial in [1, 31, 61, 91]:  
+#         print(f"DEBUG: Partner Match on Trial {trial}")
+#         row = df_photoshare.iloc[trial - 1]
+#         partner_name = row['Partner']
+        
+#         # **Show Partner Match first**
+#         partner_match_with_loading(win, partner_name, expdir)
+
+#         # **Then show Emotion Ratings**
+#         print(f"DEBUG: Emotion Ratings on Trial {trial}")
+#         display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+
+#     # **Determine Photo Share or Gamble Trial**
+#     cycle_position = (trial - 1) % trials_per_block  # Position within the block
+#     cycle_within_set = cycle_position % photo_gamble_cycle  # Position within the 10-trial cycle
+
+#     if cycle_position < 15 or (15 < cycle_position < 30):  # Before AND after mid-block emotion ratings
+#         if cycle_within_set < 5:  # First 5 trials → Photo Share
+#             print(f"DEBUG: Photo Share Trial {trial}")
+#             row = df_photoshare.iloc[(trial - 1) % len(df_photoshare)]
+#             photo_share_screen(win)
+#         else:  # Next 5 trials → Gamble
+#             print(f"DEBUG: Gamble Trial {trial}")
+#             row = df_gambles.iloc[(trial - 1) % len(df_gambles)]
+#             gamble_screen(win)
+
+#     # **Mid-Block Emotion Ratings after 15 trials (Trial 15, 45, 75, 105)**
+#     if cycle_position == (num_cycles_before_mid_emotion * photo_gamble_cycle - 1):  # Trial 15, 45, 75, 105
+#         print(f"DEBUG: Emotion Rating on Trial {trial}")
+#         display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+
+#     # **Final Emotion + Salience Ratings at the end of the block (Trial 30, 60, 90, 120)**
+#     if cycle_position == (trials_per_block - 1):  # Trial 30, 60, 90, 120
+#         print(f"DEBUG: Emotion & Salience Rating on Trial {trial}")
+#         display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+#         salience_rating(win, salienceavatar_image)  # Display Salience Rating
+
+# print("DEBUG: Experiment Completed.")
+
+# # Close the experiment window after all trials
+# win.close()
+# core.quit()
+
+
+
+
+
+
+
+
+
+# # Loop through trials
+# for index, row in df_photoshare.iterrows():
+#     if choiceKeys = 'z'
+#         core.quit()
+#     # Only run this on specific trial numbers (partner match trials)
+#     if row['TrialNumber'] in [1, 31, 61, 91]:  
+        
+#         # Extract partner name from the trial data
+#         partner_name = row['Partner']
+        
+#         # Call the function to display loading and partner match screen
+#         partner_match_with_loading(win, partner_name, expdir)
+
+#         display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+
+#     if row["TrialNumber"] in range(1,120):
+
+#         photo_share_screen(win)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
