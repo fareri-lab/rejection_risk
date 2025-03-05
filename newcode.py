@@ -263,7 +263,7 @@ displayrating_text = visual.TextStim(win=win, name='displayrating_text',
 #emotion3
 emotion3_slider = visual.Slider(win=win, name='slider3',
         startValue=999, size=(12.0, 0.8), pos=(0, -3.2), units=None,
-        labels=('0','1(Not at all)', '2', '3', '4', '5 (A lot)'), ticks=(0,1, 2, 3, 4, 5), granularity=0.0,
+        labels=(['0','1(Not at all)', '2', '3', '4', '5 (A lot)']), ticks=(0,1, 2, 3, 4, 5), granularity=0.0,
         style='rating', styleTweaks=('labels45', 'triangleMarker'), opacity=None,
         labelColor='white', markerColor='cornflowerblue', lineColor='white', colorSpace='rgb',
         font='Open Sans', labelHeight=0.05, 
@@ -454,6 +454,20 @@ certain_text = visual.TextStim(win, text="", pos=(10, 0), height=1)
 cue = visual.TextStim(win, text="Make your choice", pos=(0, 10.5), height=1)
 
 routine_clock = core.Clock()  # Initialize the clock
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Emotion Rating Screen
 routine_clock.reset()  # Reset the clock before entering the loop
@@ -782,3 +796,123 @@ for index, row in df_gambles.iterrows():
 # Close the experiment
 win.close()
 core.quit()
+
+trial_data = photoshare_trials
+
+log_file = os.path.join('%s/data/sub-%s_rejectionrisk.csv' %(str(expdir), sub_id))
+
+trials_run = data.TrialHandler(trial_data[:], 1, method="sequential")
+
+
+#reset globalClock for beginning of task
+globalClock.reset()
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+# main task loop
+def run_experiment(trials):
+    resp = []
+    fileName=log_file.format(sub_id)
+
+
+    globalClock.reset()
+    
+    for trial in trials:
+        if row['TrialNumber'] not in [1, 31, 61, 91]: # establishes two blocks per 30 trials
+            continueRoutine = False # if not trial 31 or 63, skip routine completely
+
+        if 'escape' in event.getKeys():
+            win.close()
+            core.quit()
+
+        charlie_emoji = os.path.join(expdir, "Task_Images", "nerdemoji_nobackground.png")
+        riley_emoji = os.path.join(expdir, "Task_Images", "huggingemoji.png")
+        sam_emoji = os.path.join(expdir, "Task_Images", "smilingemoji.png")
+        alex_emoji = os.path.join(expdir, "Task_Images", "sunglassemoji_nobackground.png")
+
+        partner_name = row['Partner'] # got partner name from the spreadhseet
+        matched_text = 'You have matched with' + " " + str(partner_name) + "!"
+        
+        if partner_name == 'Charlie':
+            partneravatar= charlie_emoji
+        elif partner_name == 'Riley':
+            partneravatar= riley_emoji
+        elif partner_name == 'Alex':
+            partneravatar= alex_emoji
+        elif partner_name =='Sam':
+            partneravatar= sam_emoji
+
+        # Create stimuli
+        partner_avatar_stim = visual.ImageStim(win, image=partneravatar, size=(5, 5), pos=(0, 2))
+        matched_text_stim = visual.TextStim(win, text=matched_text, pos=(0, 7), height=1, color='white', wrapWidth=None)
+
+     # Start trial
+    trial_onset = globalClock.getTime()
+
+
+    # **Step 1: Display Waiting Text for 3 sec**
+    while routine_clock.getTime() < 3:
+        waiting_text.draw()
+        win.flip()
+
+    # **Step 2: Start Syncing + Transparent**
+    routine_clock.reset()  # Reset timer for syncing phase
+    while routine_clock.getTime() < 6.25:
+        syncing_text.draw()  # Syncing stays the full 9.25 sec
+        Transparent.draw()  # Transparent stays for 6.25 sec
+        
+        # **Text 0 (appears at 3 sec, disappears after 1.25 sec)**
+        if routine_clock.getTime() < 1.25:
+            text_0.draw()
+        
+        # **Text 25 + Loading 25 (appears at 4.25 sec, disappears after 1.25 sec)**
+        elif 1.25 <= routine_clock.getTime() < 2.5:
+            Loading_25.draw()
+            text_25.draw()
+        
+        # **Text 50 + Loading 50 (appears at 5.5 sec, disappears after 1.25 sec)**
+        elif 2.5 <= routine_clock.getTime() < 3.75:
+            Loading_50.draw()
+            text_50.draw()
+
+        # **Text 75 + Loading 75 (appears at 6.75 sec, disappears after 1.25 sec)**
+        elif 3.75 <= routine_clock.getTime() < 5:
+            Loading_75.draw()
+            text_75.draw()
+
+        # **Text 100 + Loading 100 (appears at 8 sec, disappears after 1.25 sec)**
+        elif 5 <= routine_clock.getTime() < 6.25:
+            Loading_100.draw()
+            text_100.draw()
+
+        win.flip()
+
+    # **Step 3: Show Matched Text and Partner Avatar**
+    win.flip()
+
+    matched_text_stim.draw()
+    partner_avatar_stim.draw()
+    presstobegin_text.draw()
+    win.flip()
+
+    #wait for spacebar press before proceeding
+    event.waitKeys(keyList=['space'])
+
+
+
+
+   for trials in enumerate([trials_run]):
+       do_run(trials)
+
+# Exit
+exit_screen.draw()
+win.flip()
+event.waitKeys()

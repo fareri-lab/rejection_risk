@@ -561,6 +561,7 @@ def display_emotion_ratings(win, emotions, slider_min=0, slider_max=5):
     # Set slider constraints
     slider_min = 0
     slider_max = 5
+    emotion_ratings = {}
 
     # Iterate through each emotion rating screen
     for emotion in emotions:
@@ -613,10 +614,8 @@ def display_emotion_ratings(win, emotions, slider_min=0, slider_max=5):
         
     return emotion_ratings
 
-def photo_share_screen(win):
+def photo_share_screen(win,row):
     partner_name = row['Partner'] # got partner name from the spreadhseet
-    
-    
     photo_file = row['Photos']  # Get photo path from the spreadsheet
     feedback = row['Feedback'] # get feedback text from the spreadsheet
     # Extract values from the spreadsheet
@@ -643,7 +642,6 @@ def photo_share_screen(win):
 
     win.flip()
     
-    
     # Determine which feedback image to use
     if 'not' in str(row['Feedback']).lower():  # Convert to string & lowercase for safety
         feedbackimage = negfeedback_image
@@ -653,14 +651,33 @@ def photo_share_screen(win):
     #display the feedback
     feedback_stim = visual.TextStim(win, text=feedback_text, pos=(0, 5), height=1, color='white')
     feedback_image_stim = visual.ImageStim(win, image=feedbackimage, size=(5, 5), pos=(0, -3))
+    continue_text = visual.TextStim(win, text="Press space to continue.", pos=(0, -8), height=1, color='white')
 
-    # **Step 5: Show Feedback Text and Image**
+
+    #Show Feedback Text and Image**
     feedback_stim.draw()
     feedback_image_stim.draw()
+    continue_text.draw()
     win.flip()
-    core.wait(2)  # Show feedback for 2 seconds
 
-def gamble_screen(win):
+    #Wait for Space Key and Record Response Time**
+    response_timer = core.Clock()  # Start timing when the message appears
+    event.clearEvents()
+    keys = event.waitKeys(keyList=['space', 'escape'], timeStamped=response_timer)
+
+    photo_response_time = None
+    # If escape is pressed, exit the experiment
+    for key, timestamp in keys:
+        if key == 'escape':
+            win.close()
+            core.quit()
+        elif key == 'space':
+            photo_response_time = timestamp  # Capture response time
+
+    return photo_response_time  # ✅ Return the time taken to press space
+    
+
+def gamble_screen(win,row):
     # Reset colors each trial
     top_text.setColor('white')
     bottom_text.setColor('white')
@@ -709,7 +726,8 @@ def gamble_screen(win):
         if resp:
             resp = resp[0]  # Get first key press
             break  # Exit loop when response is received
-
+    
+    gamble_response_time = None
     # Step 3: Process Response and Provide Feedback
     if resp:
         print(f"Captured response: {resp}")
@@ -746,10 +764,10 @@ def gamble_screen(win):
     win.flip()
     core.wait(1)  # Show feedback for 1 
     
-    response_time = response_timer.getTime() if resp else None
-    return response_time, gamble_choice  # Now correctly coded as 1 (Risky) or 0 (Certain)
+    gamble_response_time = response_timer.getTime() if resp else None
+    return gamble_response_time, gamble_choice  # Now correctly coded as 1 (Risky) or 0 (Certain)
 
-def salience_rating(win, partner_avatar_stim):
+def salience_rating(win, partner_avatar_stim,partner_name):
     # Set slider constraints
     slider_min = 0
     slider_max = 5
@@ -786,135 +804,297 @@ def salience_rating(win, partner_avatar_stim):
             partner_avatar_stim.draw()
             win.flip()  # Refresh the screen after updating everything
 
-    
+    # ✅ Return the selected rating  
+    return round(salience_slider.getMarkerPos(), 1)
 
-# Loop through the trials
-# Total trials and block settings
-total_trials = 120
-trials_per_block = 30
-photo_gamble_cycle = 10  # 5 Photo + 5 Gamble = 10 trials per cycle
-num_cycles_before_mid_emotion = 3  # 3 cycles (15 trials) before mid-block Emotion Ratings
-num_cycles_after_mid_emotion = 3  # 3 cycles (15 trials) after mid-block Emotion Ratings
-
-# Initialize an empty list to store trial data
+# Define a list to store trial data
+trials_per_block = 30  # Each block has 30 trials
 experiment_data = []
 
-# Loop through the trials
-for trial in range(1, total_trials + 1):
-
-    print(f"DEBUG: Starting Trial {trial}")
-    
-    # Identify which block this trial belongs to
-    block_number = (trial - 1) // trials_per_block + 1
-
-    # Create a dictionary for trial data with empty values by default
-    trial_data = {
-        "TrialNumber": trial,
-        "Block": block_number,
-        "Partner": None,
-        "Condition": None,
-        "Feedback": None,
-        "ResponseTime": None,
-        "GambleChoice": None,
-        "GambleProbability": None,
-        "GamblePrice": None,
-        "NonGamblePrice": None,
-        "SelectedPrice": None,
-        "Emotion1": None,
-        "Emotion2": None,
-        "Emotion3": None,
-        "Emotion4": None,
-        "Emotion5": None,
-        "Emotion6": None,
-        "SalienceRating": None
-    }
-
-    # **Partner Match on the first trial of each block**
-    if trial in [1, 31, 61, 91]:  
-        print(f"DEBUG: Partner Match on Trial {trial}")
-        row = df_photoshare.iloc[trial - 1]
-        partner_name = row['Partner']
-        trial_data["Partner"] = partner_name
-
-        partner_match_with_loading(win, partner_name, expdir)
-
-        # **Emotion Ratings immediately after Partner Match**
-        print(f"DEBUG: Emotion Ratings on Trial {trial}")
-        emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
-        
-        if emotion_ratings:  # Check if valid data is returned
-            for i, rating in enumerate(emotion_ratings.values()):
-                trial_data[f"Emotion{i+1}"] = rating
-
-    # **Determine Photo Share or Gamble Trial**
-    cycle_position = (trial - 1) % trials_per_block  
-    cycle_within_set = cycle_position % photo_gamble_cycle  
-
-    if cycle_position < 15 or (15 < cycle_position < 30):  
-        if cycle_within_set < 5:  
-            print(f"DEBUG: Photo Share Trial {trial}")
-            row = df_photoshare.iloc[(trial - 1) % len(df_photoshare)]
-            trial_data["Partner"] = row['Partner']
-            trial_data["Feedback"] = row['Feedback']
-            photo_share_screen(win)
-        else:  
-            print(f"DEBUG: Gamble Trial {trial}")
-            row = df_gambles.iloc[(trial - 1) % len(df_gambles)]
-            response_time, gamble_choice = gamble_screen(win)
-
-            # Store gamble data
-            trial_data["ResponseTime"] = response_time
-            trial_data["GambleChoice"] = gamble_choice  # Now correctly coded as 1 (Risky) or 0 (Certain)
-            trial_data["GambleProbability"] = row["win_probability"]
-            trial_data["GamblePrice"] = row["risky_gain"]
-            trial_data["NonGamblePrice"] = row["certain"]
-            trial_data["SelectedPrice"] = row["risky_gain"] if gamble_choice == 1 else row["certain"]
-
-    # **Mid-Block Emotion Ratings after 15 trials (Trial 15, 45, 75, 105)**
-    if cycle_position == (num_cycles_before_mid_emotion * photo_gamble_cycle - 1):  
-        print(f"DEBUG: Emotion Rating on Trial {trial}")
-        emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
-
-        if emotion_ratings:  # Check if valid data is returned
-            for i, rating in enumerate(emotion_ratings.values()):
-                trial_data[f"Emotion{i+1}"] = rating
-
-    # **Final Emotion + Salience Ratings at the end of the block (Trial 30, 60, 90, 120)**
-    if cycle_position == (trials_per_block - 1):  
-        print(f"DEBUG: Emotion & Salience Rating on Trial {trial}")
-        emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
-
-        if emotion_ratings:  # Check if valid data is returned
-            for i, rating in enumerate(emotion_ratings.values()):
-                trial_data[f"Emotion{i+1}"] = rating
-
-        print(f"DEBUG: Salience Rating on Trial {trial}")
-        trial_data["SalienceRating"] = salience_rating(win, salienceavatar_image)
-
-    # **Append trial data to experiment_data list**
-    experiment_data.append(trial_data)
-
-# **Saving Data**
 # Define the output directory for data storage
 data_dir = os.path.join(expdir, "data")
 
-# Ensure the data directory exists; if not, create it
+# Ensure the data directory exists
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
 
-# Define the output file path in the data folder
+# Define the output file path
 output_file = os.path.join(data_dir, f"{sub_id}_data.csv")
 
-# Convert list of dictionaries into a DataFrame
-df_output = pd.DataFrame(experiment_data)
+def save_data():
+    """ Save the collected experiment data to CSV. """
+    if experiment_data:  
+        df_output = pd.DataFrame(experiment_data)
+        df_output.to_csv(output_file, index=False)
+        print(f"DEBUG: Experiment data saved to {output_file}") 
 
-# Save to CSV in the correct directory
-df_output.to_csv(output_file, index=False)
-print(f"DEBUG: Experiment data saved to {output_file}")
+try:
+    choice_index = 0  # Track which gamble choice we're on
 
-# Close the experiment window after all trials
+    for block_start in range(0, len(df_photoshare), trials_per_block):
+        block = df_photoshare.iloc[block_start:block_start + trials_per_block]
+        
+        # **Partner Match on First Trials of Blocks**
+        first_trial = block.iloc[0]['TrialNumber']
+        if first_trial in [1, 31, 61, 91]:
+            print(f"DEBUG: Partner Match on Trial {first_trial}")
+            partner_match_with_loading(win, block.iloc[0]['Partner'], expdir)
+
+        # **Emotion Rating at the Start of Each Block**
+        if first_trial in [1, 30, 60, 90, 120]:
+            print(f"DEBUG: Emotion Ratings on Trial {first_trial}")
+            emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+            experiment_data.append({"TrialNumber": first_trial, **emotion_ratings})
+
+        # ✅ **Run Three 5-Photo, 5-Gamble Sequences**
+        for cycle in range(3):  
+            photo_batch_start = cycle * 5
+            gamble_batch_start = choice_index  # Track where we are in gamble trials
+
+            # **Show 5 Photo Shares**
+            batch_photos = block.iloc[photo_batch_start:photo_batch_start + 5]
+            for _, photo_row in batch_photos.iterrows():
+                trial = photo_row['TrialNumber']
+                print(f"DEBUG: Photo Share Trial {trial}")
+                response_time_photo = photo_share_screen(win, photo_row)
+                experiment_data.append({
+                    "TrialNumber": trial,
+                    "Task": "PhotoShare",
+                    "PhotoResponseTime": response_time_photo
+                })
+
+            # **Show 5 Gambles**
+            batch_gambles = df_gambles.iloc[gamble_batch_start:gamble_batch_start + 5]
+            for _, gamble_row in batch_gambles.iterrows():
+                trial = gamble_row['ChoiceNumber']
+                print(f"DEBUG: Gamble Trial {trial}")
+                response_time_gamble, gamble_choice = gamble_screen(win, gamble_row)
+
+                experiment_data.append({
+                    "TrialNumber": trial,
+                    "Task": "Gamble",
+                    "ChoiceNumber": gamble_row['ChoiceNumber'],
+                    "GambleResponseTime": response_time_gamble,
+                    "GambleChoice": gamble_choice,
+                    "SelectedPrice": gamble_row["risky_gain"] if gamble_choice == 1 else gamble_row["certain"],
+                    "WinProbability": gamble_row["win_probability"] if gamble_choice == 1 else None
+                })
+
+            choice_index += 5  # Move to the next set of gambles
+
+        # ✅ **Midway Emotion Rating After 15 Trials**
+        midway_trial = block.iloc[14]['TrialNumber']
+        if midway_trial in [15, 45, 75, 105]:
+            print(f"DEBUG: Midway Emotion Rating on Trial {midway_trial}")
+            emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+            experiment_data.append({"TrialNumber": midway_trial, **emotion_ratings})
+
+        # ✅ **Now Run the Second Half (Trials 16-30)**
+        for batch_start in range(15, 30, 5):
+            batch_photos = block.iloc[batch_start:batch_start + 5]  # 5 photo trials
+            batch_gambles = df_gambles.iloc[choice_index:choice_index + 5]  # 5 gamble trials
+
+            # **Show 5 Photo Shares**
+            for _, photo_row in batch_photos.iterrows():
+                trial = photo_row['TrialNumber']
+                print(f"DEBUG: Photo Share Trial {trial}")
+                response_time_photo = photo_share_screen(win, photo_row)
+                experiment_data.append({
+                    "TrialNumber": trial,
+                    "Task": "PhotoShare",
+                    "PhotoResponseTime": response_time_photo
+                })
+
+            # **Show 5 Gambles**
+            for _, gamble_row in batch_gambles.iterrows():
+                trial = gamble_row['ChoiceNumber']
+                print(f"DEBUG: Gamble Trial {trial}")
+                response_time_gamble, gamble_choice = gamble_screen(win, gamble_row)
+
+                experiment_data.append({
+                    "TrialNumber": trial,
+                    "Task": "Gamble",
+                    "ChoiceNumber": gamble_row['ChoiceNumber'],
+                    "GambleResponseTime": response_time_gamble,
+                    "GambleChoice": gamble_choice,
+                    "SelectedPrice": gamble_row["risky_gain"] if gamble_choice == 1 else gamble_row["certain"],
+                    "WinProbability": gamble_row["win_probability"] if gamble_choice == 1 else None
+                })
+
+            choice_index += 5  # Move to the next set of gambles
+
+        # ✅ **Final Emotion + Salience Ratings**
+        last_trial = block.iloc[-1]['TrialNumber']
+        if last_trial in [30, 60, 90, 120]:
+            print(f"DEBUG: Final Emotion & Salience Ratings on Trial {last_trial}")
+            emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+            salience_rating_value = salience_rating(win, salienceavatar_image, block.iloc[-1]['Partner'])
+            experiment_data.append({
+                "TrialNumber": last_trial,
+                **emotion_ratings,
+                "SalienceRating": salience_rating_value
+            })
+
+        # **Save Data After Each Block**
+        save_data()
+
+except KeyboardInterrupt:
+    print("Experiment interrupted. Saving data...")
+    save_data()
+
+except Exception as e:
+    print(f"ERROR: {e}\nSaving collected data before exiting.")
+    save_data()
+    sys.exit(1)
+
+# **Final Save Before Exit**
+save_data()
+
+# Close PsychoPy window
 win.close()
 core.quit()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Loop through the trials
+# # Total trials and block settings
+# total_trials = 120
+# trials_per_block = 30
+# photo_gamble_cycle = 10  # 5 Photo + 5 Gamble = 10 trials per cycle
+# num_cycles_before_mid_emotion = 3  # 3 cycles (15 trials) before mid-block Emotion Ratings
+# num_cycles_after_mid_emotion = 3  # 3 cycles (15 trials) after mid-block Emotion Ratings
+
+# # Initialize an empty list to store trial data
+# experiment_data = []
+
+# # Loop through the trials
+# for trial in range(1, total_trials + 1):
+
+#     print(f"DEBUG: Starting Trial {trial}")
+    
+#     # Identify which block this trial belongs to
+#     block_number = (trial - 1) // trials_per_block + 1
+
+#     # Create a dictionary for trial data with empty values by default
+#     trial_data = {
+#         "TrialNumber": trial,
+#         "Block": block_number,
+#         "Partner": None,
+#         "Condition": None,
+#         "Feedback": None,
+#         "ResponseTime": None,
+#         "GambleChoice": None,
+#         "GambleProbability": None,
+#         "GamblePrice": None,
+#         "NonGamblePrice": None,
+#         "SelectedPrice": None,
+#         "Emotion1": None,
+#         "Emotion2": None,
+#         "Emotion3": None,
+#         "Emotion4": None,
+#         "Emotion5": None,
+#         "Emotion6": None,
+#         "SalienceRating": None
+#     }
+
+#     # **Partner Match on the first trial of each block**
+#     if trial in [1, 31, 61, 91]:  
+#         print(f"DEBUG: Partner Match on Trial {trial}")
+#         row = df_photoshare.iloc[trial - 1]
+#         partner_name = row['Partner']
+#         trial_data["Partner"] = partner_name
+
+#         partner_match_with_loading(win, partner_name, expdir)
+
+#         # **Emotion Ratings immediately after Partner Match**
+#         print(f"DEBUG: Emotion Ratings on Trial {trial}")
+#         emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+        
+#         if emotion_ratings:  # Check if valid data is returned
+#             for i, rating in enumerate(emotion_ratings.values()):
+#                 trial_data[f"Emotion{i+1}"] = rating
+
+#     # **Determine Photo Share or Gamble Trial**
+#     cycle_position = (trial - 1) % trials_per_block  
+#     cycle_within_set = cycle_position % photo_gamble_cycle  
+
+#     if cycle_position < 15 or (15 < cycle_position < 30):  
+#         if cycle_within_set < 5:  
+#             print(f"DEBUG: Photo Share Trial {trial}")
+#             row = df_photoshare.iloc[(trial - 1) % len(df_photoshare)]
+#             trial_data["Partner"] = row['Partner']
+#             trial_data["Feedback"] = row['Feedback']
+#             photo_share_screen(win)
+#         else:  
+#             print(f"DEBUG: Gamble Trial {trial}")
+#             row = df_gambles.iloc[(trial - 1) % len(df_gambles)]
+#             response_time, gamble_choice = gamble_screen(win)
+
+#             # Store gamble data
+#             trial_data["ResponseTime"] = response_time
+#             trial_data["GambleChoice"] = gamble_choice  # Now correctly coded as 1 (Risky) or 0 (Certain)
+#             trial_data["GambleProbability"] = row["win_probability"]
+#             trial_data["GamblePrice"] = row["risky_gain"]
+#             trial_data["NonGamblePrice"] = row["certain"]
+#             trial_data["SelectedPrice"] = row["risky_gain"] if gamble_choice == 1 else row["certain"]
+
+#     # **Mid-Block Emotion Ratings after 15 trials (Trial 15, 45, 75, 105)**
+#     if cycle_position == (num_cycles_before_mid_emotion * photo_gamble_cycle - 1):  
+#         print(f"DEBUG: Emotion Rating on Trial {trial}")
+#         emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+
+#         if emotion_ratings:  # Check if valid data is returned
+#             for i, rating in enumerate(emotion_ratings.values()):
+#                 trial_data[f"Emotion{i+1}"] = rating
+
+#     # **Final Emotion + Salience Ratings at the end of the block (Trial 30, 60, 90, 120)**
+#     if cycle_position == (trials_per_block - 1):  
+#         print(f"DEBUG: Emotion & Salience Rating on Trial {trial}")
+#         emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
+
+#         if emotion_ratings:  # Check if valid data is returned
+#             for i, rating in enumerate(emotion_ratings.values()):
+#                 trial_data[f"Emotion{i+1}"] = rating
+
+#         print(f"DEBUG: Salience Rating on Trial {trial}")
+#         trial_data["SalienceRating"] = salience_rating(win, salienceavatar_image)
+
+#     # **Append trial data to experiment_data list**
+#     experiment_data.append(trial_data)
+
+# # **Saving Data**
+# # Define the output directory for data storage
+# data_dir = os.path.join(expdir, "data")
+
+# # Ensure the data directory exists; if not, create it
+# if not os.path.exists(data_dir):
+#     os.makedirs(data_dir)
+
+# # Define the output file path in the data folder
+# output_file = os.path.join(data_dir, f"{sub_id}_data.csv")
+
+# # Convert list of dictionaries into a DataFrame
+# df_output = pd.DataFrame(experiment_data)
+
+# # Save to CSV in the correct directory
+# df_output.to_csv(output_file, index=False)
+# print(f"DEBUG: Experiment data saved to {output_file}")
+
+# # Close the experiment window after all trials
+# win.close()
+# core.quit()
 
 
 
