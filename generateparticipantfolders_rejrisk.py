@@ -41,7 +41,7 @@ expdir = os.getcwd()
 image_dir = ''
 # make new folders for each participant and then a folder in each new folder
 for i in range(0, len(qualtrics)):
-    subj_id = qualtrics['PROLIFIC_PID'][i]
+    subj_id = qualtrics['sub_id'][i]
     subj_dir = '%s/Participant_Images/%s' % (expdir, subj_id)
     if os.path.exists(subj_dir):
         continue
@@ -84,14 +84,14 @@ for image in os.listdir(source_folder):
     # for every subject listed in the qualtrics dataframe
     for sub in range(0, len(qualtrics)):
         responseId = qualtrics['ResponseId'][sub]
-        prolificId = qualtrics['PROLIFIC_PID'][sub]
-        if len(os.listdir(indv_image_folder % (prolificId, prolificId))) == 30:
+        sub_id = qualtrics['sub_id'][sub]
+        if len(os.listdir(indv_image_folder % (sub_id, sub_id))) == 30:
             continue
         else:
             if image.startswith(responseId): #the images still start with the qualtrics response id at this point, but we will change this to prolific id in the next section
                 src = os.path.join(source_folder, image)
                 dst = os.path.join(indv_image_folder %
-                                   (prolificId, prolificId), image)
+                                   (sub_id, sub_id), image)
                 shutil.move(src, dst)
 
 
@@ -108,10 +108,10 @@ participantimagefolder = expdir + '/Participant_Images/' #parent folder for all 
 count = 1
 for sub in range(0, len(qualtrics)):
     responseId = qualtrics['ResponseId'][sub]
-    prolificId = qualtrics['PROLIFIC_PID'][sub]
+    sub_id = qualtrics['sub_id'][sub]
     for p in os.listdir(participantimagefolder): #p = participant; for all ndividual folders in particpant image folder
         if not p.endswith('.DS_Store') or p.endswith('blank_file'): #we do not want DS store or blank file
-            if p.startswith(prolificId): 
+            if p.startswith(sub_id): 
                 count = 1
                 for photo in os.listdir(indv_image_folder % (p, p)):
                     if "_Image_" in photo:
@@ -143,10 +143,10 @@ feedback = ''
 
 for sub in range(0, len(qualtrics)):
     responseId = qualtrics['ResponseId'][sub]
-    prolificId = qualtrics['PROLIFIC_PID'][sub]
+    sub_id = qualtrics['sub_id'][sub]
     for folder in os.listdir(participantimagefolder):
         if not folder.endswith('.DS_Store') or folder.endswith('blank_file'):
-            if folder.startswith(prolificId):
+            if folder.startswith(sub_id):
                 imagedir = indv_image_folder % (folder, folder) + '/'
                 print(imagedir)
         
@@ -215,16 +215,7 @@ for sub in range(0, len(qualtrics)):
                 choice_set_expanded = pd.DataFrame(columns=choice_set.columns)
                 for _ in range(4):
                     shuffled_set = choice_set.sample(frac=1).reset_index(drop=True)
-                    choice_set_expanded = pd.concat([choice_set_expanded, shuffled_set], ignore_index=True)
-                
-                # Ensure the number of trials and choice rows match
-                assert len(choice_set_expanded) == len(alltrials), "Mismatch between trial count and choice set size"
-                
-                # Concatenate choice set info with trial data
-                alltrials = pd.concat([alltrials.reset_index(drop=True), choice_set_expanded.reset_index(drop=True)], axis=1)
-                                
-                                
-                                
+                    choice_set_expanded = pd.concat([choice_set_expanded, shuffled_set], ignore_index=True)               
                                 
                                 
                                 
@@ -233,10 +224,6 @@ for sub in range(0, len(qualtrics)):
                 trial_sheet = '%s/%s_trials.csv' % (subjdir, subid)
                 alltrials['TrialNumber'] = range(1, len(alltrials)+1)
                 alltrials.to_csv(trial_sheet, index=False)
-#%%
-#Delete all extraneous photos in Raw_Participant_Folder (sourcefolder)
-# for f in os.listdir(source_folder):
-#     os.remove(os.path.join(source_folder, f))
-# os.chdir(source_folder)
-# with open("blank_file", "w") as f:
-#         f.write("2")
+
+                gambles_sheet = '%s/%s_gambles.csv' % (subjdir, subid)
+                alltrials.to_csv(trial_sheet, index=False)
