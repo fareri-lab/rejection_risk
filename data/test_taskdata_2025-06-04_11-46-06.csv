@@ -1,0 +1,12 @@
+TrialNumber,happy,emotion2,emotion3,emotion4,emotion5,emotion6,SubjectID,PhotoTrialNumber,GambleTrialNumber,Task,Partner,Condition,PhotoFilename,Feedback,FeedbackWait,PhotoResponseTime,RiskyGain,CertainAmount,GambleResponseTime,GambleChoice,SelectedPrice,GambleKey
+1.0,3.2,2.5,2.5,2.5,2.5,2.5,,,,,,,,,,,,,,,,
+,,,,,,,test,1.0,,PhotoShare,Charlie,Rej,Participant_Images/test/test_Images/test_Image_2.jpeg,did not like,3.613205605,1.2088604999999006,,,,,,
+,,,,,,,test,2.0,,PhotoShare,Charlie,Rej,Participant_Images/test/test_Images/test_Image_13.jpeg,did not like,4.988446431,0.2136217500001294,,,,,,
+,,,,,,,test,3.0,,PhotoShare,Charlie,Rej,Participant_Images/test/test_Images/test_Image_20.jpeg,did not like,3.470791822,0.5402641250002489,,,,,,
+,,,,,,,test,4.0,,PhotoShare,Charlie,Rej,Participant_Images/test/test_Images/test_Image_11.jpeg,did not like,3.820572462,0.7667735830000311,,,,,,
+,,,,,,,test,5.0,,PhotoShare,Charlie,Rej,Participant_Images/test/test_Images/test_Image_29.jpeg,did not like,2.455989137,0.5870848749991637,,,,,,
+,,,,,,,test,,1.0,Gamble,,,,,,,$17.38 ,$7.31 ,2.0711659579992556,1.0,$17.38 ,1
+,,,,,,,test,,2.0,Gamble,,,,,,,$4.00 ,$0.00 ,,999.0,999,999
+,,,,,,,test,,3.0,Gamble,,,,,,,$5.00 ,$0.00 ,2.7989947089999987,1.0,$5.00 ,1
+,,,,,,,test,,4.0,Gamble,,,,,,,$10.00 ,$0.00 ,2.323699833000319,0.0,$0.00 ,9
+,,,,,,,test,,5.0,Gamble,,,,,,,$9.00 ,$0.00 ,1.5292357080006695,1.0,$9.00 ,1
