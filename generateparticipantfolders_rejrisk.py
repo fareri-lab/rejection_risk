@@ -167,7 +167,7 @@ for sub in range(0, len(qualtrics)):
                 alltrials['Condition'] = ''
                 alltrials['Photos'] = ''
                 # for k in range(0,len(photolist)):
-                for i in range(0, 5):
+                for i in range(0, 4):
                     if condition_selected[i] == 'Rej':
                         pDislike = .8
                         pLike = .2
@@ -208,15 +208,32 @@ for sub in range(0, len(qualtrics)):
                 subid = folder
                 expdir = participantimagefolder
                 
-                # Read in the 30-item choice set with expected values and options
-                choice_set = pd.read_csv(os.path.join(homedir, 'choiceset_30.csv'))
+                input_file = os.path.join(homedir, 'choiceset_30.xlsx')
+
+                # Load raw Excel contents
+                # Load the full sheet including header (row 0)
+                full_df = pd.read_excel(input_file)
                 
-                # Repeat and shuffle the 30-item set across 4 blocks
-                choice_set_expanded = pd.DataFrame(columns=choice_set.columns)
-                for _ in range(4):
-                    shuffled_set = choice_set.sample(frac=1).reset_index(drop=True)
-                    choice_set_expanded = pd.concat([choice_set_expanded, shuffled_set], ignore_index=True)               
-                                
+                # Extract the header (row 0 is automatically header, so full_df.columns are headers)
+                # Extract rows 1 to 31 (pandas uses 0-based indexing, so rows 1:32 to include row 31)
+                data_rows = full_df.iloc[0:30].copy()  # 31 rows to shuffle
+                
+                columns_to_keep = ['EV LEVEL', 'risky_gain', 'safe']
+                data_subset = data_rows[columns_to_keep]
+                
+                # Shuffle 4 times independently and concatenate
+                shuffled_blocks = pd.concat(
+                    [data_subset.sample(frac=1).reset_index(drop=True) for _ in range(4)],
+                    ignore_index=True
+                )
+                
+                # Now save: write header once, then all shuffled data
+                gambles_sheet = '%s/%s_gambles.csv' % (subj_dir, subid)
+                shuffled_blocks.to_csv(gambles_sheet, index=False)
+                
+                print(f"Saved gambles file to: {gambles_sheet}")
+
+
                                 
                                 
                 alltrials['FeedbackWait'] = spreadsheet['FeedbackWait']
