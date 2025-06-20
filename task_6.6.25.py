@@ -758,7 +758,7 @@ def gamble_screen(win,row):
 
         elif resp == '1':  # Risky option selected
             gamble_choice = 1
-            top_text.setColor('oragne')
+            top_text.setColor('orange')
            # probability_text.setColor('green')
             bottom_text.setColor('orange')
 
