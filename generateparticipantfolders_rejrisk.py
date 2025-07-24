@@ -136,7 +136,7 @@ for sub in range(0, len(qualtrics)):
 # change qualtrics ID to PROLIFIC ID
 spreadsheet = pd.read_csv('spreadsheet_template.csv')
 sociallevel = ["Rej", "Acc","Acc", "Rej"]
-partnerlist = ['Charlie', 'Sam', 'Alex', 'Taylor']
+partnerlist = ['Charlie', 'Sam', 'Alex', 'Riley']
 condition = ''
 partner = ''
 feedback = ''

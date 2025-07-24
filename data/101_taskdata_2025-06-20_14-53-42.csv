@@ -1,0 +1,16 @@
+TrialNumber,happy,emotion2,emotion3,emotion4,emotion5,emotion6,SubjectID,PhotoTrialNumber,GambleTrialNumber,Task,Partner,Condition,PhotoFilename,Feedback,FeedbackWait,PhotoResponseTime,RiskyGain,CertainAmount,GambleResponseTime,GambleChoice,SelectedPrice,GambleKey
+1.0,2.5,2.5,2.5,2.5,2.5,2.5,,,,,,,,,,,,,,,,
+,,,,,,,101,1.0,,PhotoShare,Sam,Rej,Participant_Images/101/101_Images/101_Image_4.jpeg,did not like,3.613205605,0.7277245409786701,,,,,,
+,,,,,,,101,2.0,,PhotoShare,Sam,Rej,Participant_Images/101/101_Images/101_Image_23.jpeg,liked,4.988446431,0.3805964170023799,,,,,,
+,,,,,,,101,3.0,,PhotoShare,Sam,Rej,Participant_Images/101/101_Images/101_Image_17.jpeg,did not like,3.470791822,0.41266670799814165,,,,,,
+,,,,,,,101,4.0,,PhotoShare,Sam,Rej,Participant_Images/101/101_Images/101_Image_10.jpeg,did not like,3.820572462,0.23319708299823105,,,,,,
+,,,,,,,101,5.0,,PhotoShare,Sam,Rej,Participant_Images/101/101_Images/101_Image_24.jpeg,did not like,2.455989137,3.2933371659601107,,,,,,
+,,,,,,,101,,1.0,Gamble,,,,,,,17.73034185,11.13482908,,999.0,999.0,999
+,,,,,,,101,,2.0,Gamble,,,,,,,21.72854467,9.135727663,,999.0,999.0,999
+,,,,,,,101,,3.0,Gamble,,,,,,,20.0262823,1.986858849,,999.0,999.0,999
+,,,,,,,101,,4.0,Gamble,,,,,,,19.78061316,6.109693419,,999.0,999.0,999
+,,,,,,,101,,5.0,Gamble,,,,,,,17.65046003,7.174769986,,999.0,999.0,999
+,,,,,,,101,6.0,,PhotoShare,Sam,Rej,Participant_Images/101/101_Images/101_Image_13.jpeg,did not like,3.79605092,5.095247916993685,,,,,,
+,,,,,,,101,7.0,,PhotoShare,Sam,Rej,Participant_Images/101/101_Images/101_Image_5.jpeg,did not like,3.562416326,3.9760989169590175,,,,,,
+,,,,,,,101,8.0,,PhotoShare,Sam,Rej,Participant_Images/101/101_Images/101_Image_9.jpeg,did not like,2.843822497,0.34710420900955796,,,,,,
+,,,,,,,101,9.0,,PhotoShare,Sam,Rej,Participant_Images/101/101_Images/101_Image_27.jpeg,liked,3.546495948,1.1068204579642043,,,,,,

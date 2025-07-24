@@ -441,9 +441,9 @@ futuresharing_continue_text = visual.TextStim(win=win, name='futuresharing_conti
 
 futuresharing_avatar_image = visual.ImageStim(
     win=win,
-    name='futuresharing_eavatar_image', 
+    name='futuresharing_avatar_image', 
     image='default.png', mask=None, anchor='center',
-    ori=0.0, pos=(0, 0), draggable=False, size=(0.3, 0.55),
+    ori=0.0, pos=(0, 0), draggable=False, size=(0.5, 0.8),
     color=[1,1,1], colorSpace='rgb', opacity=None,
     flipHoriz=False, flipVert=False,
     texRes=128.0, interpolate=True, depth=-3.0)
@@ -456,6 +456,13 @@ display_futuresharing_rating_text = visual.TextStim(win=win, name='display_futur
     languageStyle='LTR',
     depth=-5.0)
 
+
+emoji_paths = {
+            'Charlie': os.path.join(expdir, "Task_Images", "nerdemoji_nobackground.png"),
+            'Riley': os.path.join(expdir, "Task_Images", "huggingemoji.png"),
+            'Alex': os.path.join(expdir, "Task_Images", "sunglassemoji_nobackground.png"),
+            'Sam': os.path.join(expdir, "Task_Images", "smilingemoji.png")
+        }
 # Define stimuli for gamble screens
 top_box = visual.Rect(win, width=9.0, height=7.0, pos=(-10, 5),
                       lineWidth=5, lineColor='white', fillColor='black')
@@ -835,7 +842,7 @@ def play_sync_tone():
         fixation.draw()
         beep = sound.Sound('beep.wav')
         beep.play()
-        core.wait(0.5)  # Wait to ensure it finishes
+        core.wait(3)  # Wait to ensure it finishes
     else:
         print("WARNING: beep.wav not found.")
 
@@ -946,10 +953,10 @@ try:
 
                 photo_trial_num += 1
 
-                fixation = visual.TextStim(win, text='+', height=1.0, color='white')
-                fixation.draw()
-                win.flip()
-                core.wait(7.0)
+            fixation = visual.TextStim(win, text='+', height=1.0, color='white')
+            fixation.draw()
+            win.flip()
+            core.wait(7.0)
 
             # **Show 5 Gambles**
 
@@ -985,10 +992,10 @@ try:
 
                 gamble_trial_num += 1
 
-                fixation = visual.TextStim(win, text='+', height=1.0, color='white')
-                fixation.draw()
-                win.flip()
-                core.wait(7.0)
+            fixation = visual.TextStim(win, text='+', height=1.0, color='white')
+            fixation.draw()
+            win.flip()
+            core.wait(7.0)
 
 
             choice_index += 5  # Move to the next set of gambles
@@ -1026,10 +1033,10 @@ try:
                 })
                 photo_trial_num += 1
 
-                fixation = visual.TextStim(win, text='+', height=1.0, color='white')
-                fixation.draw()
-                win.flip()
-                core.wait(7.0)
+            fixation = visual.TextStim(win, text='+', height=1.0, color='white')
+            fixation.draw()
+            win.flip()
+            core.wait(7.0)
 
             # -- 5 Gamble Trials --
             for _, gamble_row in batch_gambles.iterrows():
@@ -1060,10 +1067,10 @@ try:
                 })
                 gamble_trial_num += 1
 
-                fixation = visual.TextStim(win, text='+', height=1.0, color='white')
-                fixation.draw()
-                win.flip()
-                core.wait(7.0)
+            fixation = visual.TextStim(win, text='+', height=1.0, color='white')
+            fixation.draw()
+            win.flip()
+            core.wait(7.0)
 
             choice_index += 5
 
@@ -1072,7 +1079,10 @@ try:
         if last_trial in [30, 60, 90, 120]:
             print(f"DEBUG: Final Emotion & futuresharing Ratings on Trial {last_trial}")
             emotion_ratings = display_emotion_ratings(win, emotions, slider_min=0, slider_max=5)
-            futuresharing_rating_value = futuresharing_rating(win, futuresharing_avatar_image, block.iloc[-1]['Partner'])
+            partner_name = block.iloc[-1]['Partner']  # Get the partner name here
+              # Define emoji image paths
+            futuresharing_avatar_image.setImage(emoji_paths[partner_name])
+            futuresharing_rating_value = futuresharing_rating(win, futuresharing_avatar_image, partner_name)
             experiment_data.append({
                 "SubjectID": sub_id,
                 "TrialNumber": last_trial,
