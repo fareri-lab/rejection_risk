@@ -107,7 +107,7 @@ if friend_bonus == -24 or self_bonus == 0:
     friend_bonus = '$0 - Total loss from lottery :('
 
 #print summary
-print('Participant')
+print('Participant: %s' %subj_id))
 print('Run: %s' %(self_run))
 print('Trial: %s' %(self_trial))
 print('Choice: %s' %(self_choicetext))
