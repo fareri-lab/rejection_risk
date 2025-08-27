@@ -10,6 +10,8 @@ import os
 import pandas as pd
 import random
 import shutil
+import numpy as np
+
 
 
 # read in raw qualtrics data and excel sheet of completed participants
@@ -218,18 +220,31 @@ for sub in range(0, len(qualtrics)):
                 # Extract rows 1 to 31 (pandas uses 0-based indexing, so rows 1:32 to include row 31)
                 data_rows = full_df.iloc[0:30].copy()  # 31 rows to shuffle
                 
-                columns_to_keep = ['EV LEVEL', 'risky_gain', 'safe']
+                columns_to_keep = ['ev_level', 'risky_gain', 'certain']
                 data_subset = data_rows[columns_to_keep]
                 
-                # Shuffle 4 times independently and concatenate
+                # Shuffle into 4 independent blocks (no outcomes yet)
                 shuffled_blocks = pd.concat(
                     [data_subset.sample(frac=1).reset_index(drop=True) for _ in range(4)],
                     ignore_index=True
                 )
                 
-                # Now save: write header once, then all shuffled data
+                # Create outcome list: 60 wins, 60 losses
+                outcomes = ['w'] * 60 + ['l'] * 60
+                np.random.shuffle(outcomes)
+                
+                # Assign to outcome column
+                shuffled_blocks['outcome'] = outcomes
+                
+                # Convert to float and round to 2 decimal places
+                shuffled_blocks['certain'] = shuffled_blocks['certain'].astype(float).round(2)
+                shuffled_blocks['risky_gain'] = shuffled_blocks['risky_gain'].astype(float).round(2)
+                                
+                # Save
                 gambles_sheet = '%s/%s_gambles.csv' % (subj_dir, subid)
                 shuffled_blocks.to_csv(gambles_sheet, index=False)
+                
+
                 
                 print(f"Saved gambles file to: {gambles_sheet}")
 
