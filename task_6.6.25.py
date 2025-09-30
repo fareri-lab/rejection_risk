@@ -26,7 +26,8 @@ gamble_trial_num = 1
 
 def save_and_quit():
     df = pd.DataFrame(experiment_data)
-    filename = f"data/{sub_id}_taskdata_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+    filename = f"data/{sub_id}_taskdata_.csv"
+    #{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}
     df.to_csv(filename, index=False)
     print(f"Data saved to {filename}")
     win.close()
@@ -257,7 +258,7 @@ emotion2_slider = visual.Slider(win=win, name='slider2',
         flip=False, ori=0.0, depth=-5, readOnly=False)
 
 emotion2question_text = visual.TextStim(win=win, name='emotion2question_text',
-    text='Please rate the extent to which you feel emotion2. \n\n Use your left and right arrows to move the arrow to your desired rating.',
+    text='Please rate the extent to which you feel sad. \n\n Use your left and right arrows to move the arrow to your desired rating.',
     font='Open Sans',
     pos=(0, 4.8), draggable=False, height=1, wrapWidth=30, ori=0.0, 
     color='white', colorSpace='rgb', opacity=None, 
@@ -290,7 +291,7 @@ emotion3_slider = visual.Slider(win=win, name='slider3',
         flip=False, ori=0.0, depth=-5, readOnly=False)
 
 emotion3question_text = visual.TextStim(win=win, name='emotion3question_text',
-    text='Please rate the extent to which you feel emotion3. \n\n Use your left and right arrows to move the arrow to your desired rating.',
+    text='Please rate the extent to which you feel afraid. \n\n Use your left and right arrows to move the arrow to your desired rating.',
     font='Open Sans',
     pos=(0, 4.8), draggable=False, height=1, wrapWidth=30, ori=0.0, 
     color='white', colorSpace='rgb', opacity=None, 
@@ -324,7 +325,7 @@ emotion4_slider = visual.Slider(win=win, name='slider4',
         flip=False, ori=0.0, depth=-5, readOnly=False)
 
 emotion4question_text = visual.TextStim(win=win, name='emotion4question_text',
-    text='Please rate the extent to which you feel emotion4. \n\n Use your left and right arrows to move the arrow to your desired rating.',
+    text='Please rate the extent to which you feel angry. \n\n Use your left and right arrows to move the arrow to your desired rating.',
     font='Open Sans',
     pos=(0, 4.8), draggable=False, height=1, wrapWidth=30, ori=0.0, 
     color='white', colorSpace='rgb', opacity=None, 
@@ -358,7 +359,7 @@ emotion5_slider = visual.Slider(win=win, name='slider5',
         flip=False, ori=0.0, depth=-5, readOnly=False)
 
 emotion5question_text = visual.TextStim(win=win, name='emotion5question_text',
-    text='Please rate the extent to which you feel emotion5. \n\n Use your left and right arrows to move the arrow to your desired rating.',
+    text='Please rate the extent to which you feel surprised. \n\n Use your left and right arrows to move the arrow to your desired rating.',
     font='Open Sans',
     pos=(0, 4.8), draggable=False, height=1, wrapWidth=30, ori=0.0, 
     color='white', colorSpace='rgb', opacity=None, 
@@ -391,7 +392,7 @@ emotion6_slider = visual.Slider(win=win, name='slider6',
         flip=False, ori=0.0, depth=-5, readOnly=False)
 
 emotion6question_text = visual.TextStim(win=win, name='emotion6question_text',
-    text='Please rate the extent to which you feel emotion6. \n\n Use your left and right arrows to move the arrow to your desired rating.',
+    text='Please rate the extent to which you feel disgusted. \n\n Use your left and right arrows to move the arrow to your desired rating.',
     font='Open Sans',
     pos=(0, 4.8), draggable=False, height=1, wrapWidth=30, ori=0.0, 
     color='white', colorSpace='rgb', opacity=None, 
@@ -984,6 +985,8 @@ try:
                     "Task": "Gamble",
                     "RiskyGain": gamble_row["risky_gain"],
                     "CertainAmount": gamble_row["certain"],
+                    "Outcome":gamble_row["outcome"],
+                    "ev_level": gamble_row['ev_level'],
                     "GambleResponseTime": response_time_gamble,
                     "GambleChoice": gamble_choice,
                     "SelectedPrice": selected_price,
@@ -1060,6 +1063,8 @@ try:
                     "Task": "Gamble",
                     "RiskyGain": gamble_row["risky_gain"],
                     "CertainAmount": gamble_row["certain"],
+                    "Outcome":gamble_row["outcome"],
+                    "ev_level": gamble_row['ev_level'],
                     "GambleResponseTime": response_time_gamble,
                     "GambleChoice": gamble_choice,
                     "SelectedPrice": selected_price,
