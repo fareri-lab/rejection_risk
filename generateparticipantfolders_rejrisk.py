@@ -17,7 +17,7 @@ import numpy as np
 # read in raw qualtrics data and excel sheet of completed participants
 # make csv into data frame
 homedir = os.getcwd()
-rawqualtrics = pd.read_csv('RejectionRisk_PhotoUpload_6172025.csv')
+rawqualtrics = pd.read_csv('RejectionRisk_PhotoUpload_9302025.csv')
 completedparticipantlist = pd.read_excel('participantlist.xlsx')
 completedparticipantlist = completedparticipantlist.loc[
     completedparticipantlist['PhotosUploaded? (y/n)'] == 'n']
@@ -43,7 +43,7 @@ expdir = os.getcwd()
 image_dir = ''
 # make new folders for each participant and then a folder in each new folder
 for i in range(0, len(qualtrics)):
-    subj_id = qualtrics['sub_id'][i]
+    subj_id = qualtrics['sub_ID'][i]
     subj_dir = '%s/Participant_Images/%s' % (expdir, subj_id)
     if os.path.exists(subj_dir):
         continue
@@ -86,7 +86,7 @@ for image in os.listdir(source_folder):
     # for every subject listed in the qualtrics dataframe
     for sub in range(0, len(qualtrics)):
         responseId = qualtrics['ResponseId'][sub]
-        sub_id = qualtrics['sub_id'][sub]
+        sub_id = qualtrics['sub_ID'][sub]
         if len(os.listdir(indv_image_folder % (sub_id, sub_id))) == 30:
             continue
         else:
@@ -110,7 +110,7 @@ participantimagefolder = expdir + '/Participant_Images/' #parent folder for all 
 count = 1
 for sub in range(0, len(qualtrics)):
     responseId = qualtrics['ResponseId'][sub]
-    sub_id = qualtrics['sub_id'][sub]
+    sub_id = qualtrics['sub_ID'][sub]
     for p in os.listdir(participantimagefolder): #p = participant; for all ndividual folders in particpant image folder
         if not p.endswith('.DS_Store') or p.endswith('blank_file'): #we do not want DS store or blank file
             if p.startswith(sub_id): 
@@ -145,7 +145,7 @@ feedback = ''
 
 for sub in range(0, len(qualtrics)):
     responseId = qualtrics['ResponseId'][sub]
-    sub_id = qualtrics['sub_id'][sub]
+    sub_id = qualtrics['sub_ID'][sub]
     for folder in os.listdir(participantimagefolder):
         if not folder.endswith('.DS_Store') or folder.endswith('blank_file'):
             if folder.startswith(sub_id):
