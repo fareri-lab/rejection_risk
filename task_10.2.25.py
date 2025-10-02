@@ -886,7 +886,7 @@ Welcome to the Social Media Task
 
 In this task, you will have the opportunity to share some of your Instagram photos with other participants and receive feedback. You will also make a series of decisions that could earn you an additional monetary bonus.
 
-You will begin the task with an endowment of $X. At various points, you will choose between two options:
+You will begin the task with an endowment of $10. At various points, you will choose between two options:
 
 A gamble option, where you have a 50/50 chance of winning a set amount or earning nothing.
 
