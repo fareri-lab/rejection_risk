@@ -1,0 +1,7 @@
+TrialNumber,happy,emotion2,emotion3,emotion4,emotion5,emotion6,SubjectID,PhotoTrialNumber,GambleTrialNumber,Task,Partner,Condition,PhotoFilename,Feedback,FeedbackWait,PhotoResponseTime
+1.0,4.0,0.0,0.2,0.0,0.2,0.0,,,,,,,,,,
+,,,,,,,test,1.0,,PhotoShare,Charlie,Rej,Participant_Images/test/test_Images/test_Image_2.jpeg,did not like,3.613205605,13.34799816692248
+,,,,,,,test,2.0,,PhotoShare,Charlie,Rej,Participant_Images/test/test_Images/test_Image_13.jpeg,did not like,4.988446431,2.1385954580036923
+,,,,,,,test,3.0,,PhotoShare,Charlie,Rej,Participant_Images/test/test_Images/test_Image_20.jpeg,did not like,3.470791822,1.1872711660107598
+,,,,,,,test,4.0,,PhotoShare,Charlie,Rej,Participant_Images/test/test_Images/test_Image_11.jpeg,did not like,3.820572462,0.8802480410085991
+,,,,,,,test,5.0,,PhotoShare,Charlie,Rej,Participant_Images/test/test_Images/test_Image_29.jpeg,did not like,2.455989137,0.712222957983613
