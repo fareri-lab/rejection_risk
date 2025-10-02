@@ -715,8 +715,9 @@ def gamble_screen(win,row):
 
     # Extract values from the spreadsheet
     #probability_text.text = str(row['win_probability'])
-    top_text.text = str(row['risky_gain'])
-    certain_text.text = str(row['certain'])
+    top_text.text = f"${row['risky_gain']}"
+    certain_text.text = f"${row['certain']}"
+
 
     # Start trial
     trial_onset = globalClock.getTime()
@@ -1047,10 +1048,10 @@ try:
                 response_time_gamble, gamble_choice = gamble_screen(win, gamble_row)
 
                 if gamble_choice == 1:
-                    selected_price = gamble_row["$"+"risky_gain"]
+                    selected_price = gamble_row["risky_gain"]
                     gamble_key = '1'
                 elif gamble_choice == 0:
-                    selected_price = gamble_row["$"+ "certain"]
+                    selected_price = gamble_row["certain"]
                     gamble_key = '9'
                 else:
                     selected_price = 999
