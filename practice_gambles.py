@@ -25,7 +25,7 @@ decision_dur = 2  # Choices shown for 2 seconds
 trial_dur = 5
 
 #set keys that will be used as acceptabe responses
-choiceKeys = ('1', '9', 'z','escape','left', 'right')
+choiceKeys = ('c', 'n', 'z','escape','left', 'right')
 
 showreturnscreen = 1
 
@@ -72,7 +72,7 @@ if os.path.exists(choicetrials_path):
     df_gambles = pd.read_csv(choicetrials_path)  # Load spreadsheet
     print(df_gambles.head())  # Display first few rows for debugging
 else:
-    print(f"Error: Spreadsheet {photoshare_trials} not found in {subdir}")
+    print("Error")
     core.quit()
     
 #timing setup
@@ -157,7 +157,7 @@ def gamble_screen(win,row):
         print(f"Captured response: {resp}")
 
         if resp == 'z':  # Quit if 'z' is pressed
-            save_and_quit()
+            quit()
 
         elif resp == '1':  # Risky option selected
             gamble_choice = 1
